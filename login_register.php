@@ -11,7 +11,7 @@ $client->setClientId('783267183450-kpm3kuqe8bhl16nh31u6hbkbf53pcc1t.apps.googleu
 // Enter your Client Secrect
 $client->setClientSecret('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');
 // Enter the Redirect URL
-$client->setRedirectUri('http://localhost:8080/wonderkid_world/login_register.php');
+$client->setRedirectUri('https://wonderkidworld-cb34182facb3.herokuapp.com/login_register.php');
 
 // Adding those scopes which we want to get (email & profile Information)
 $client->addScope("email");
