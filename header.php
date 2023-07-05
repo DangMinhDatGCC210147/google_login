@@ -116,6 +116,9 @@
                                 $stmt1 = $dblink->prepare($sqlSelect);
                                 $stmt1->execute([$user_id]);
                                 $rows = $stmt1->fetchAll(PDO::FETCH_BOTH);
+                                // if($_SESSION['user_role'] == 2){
+                                //     $_SESSION['user_role'] === 'user';
+                                // }
                             ?>
                             <div class="header-mini-cart">
                                 <a href="cart.php"><img src="./assets/images/icons/cart.png" alt="Cart"> <span><?=$stmt1->rowCount()?></span></a>

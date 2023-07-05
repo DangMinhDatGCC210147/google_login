@@ -11,7 +11,7 @@ $client->setClientId('783267183450-kpm3kuqe8bhl16nh31u6hbkbf53pcc1t.apps.googleu
 // Enter your Client Secrect
 $client->setClientSecret('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');
 // Enter the Redirect URL
-$client->setRedirectUri('https://wonderkidworld-cb34182facb3.herokuapp.com/login_register.php');
+$client->setRedirectUri('http://localhost:8080/wonderkid_world/login_register.php');
 
 // Adding those scopes which we want to get (email & profile Information)
 $client->addScope("email");
@@ -186,22 +186,33 @@ if (isset($_GET['code'])) {
         $google_id = $google_account_info->id;
         $picture = $google_account_info->picture;
 
-        $_SESSION['email'] = $email;
-        $_SESSION['user_name'] = $name;
-        $_SESSION['isLoggedIn'] = true;
-
-        $c = new Connect();
-        $dblink3 = $c->connectToPDO();
-        $sql = "INSERT INTO `users`(`u_email`, `u_firstName`, `u_lastName`, `u_role`, `google_id`) VALUES (?,?,?,?,?)";
-        $re3 = $dblink3->prepare($sql);
-        $stmt3 = $re3->execute(array("$email", "$first_name", $last_name, 2, "$google_id"));
-        
-        if ($stmt3) {
+        $sqlQuery = "SELECT * FROM users WHERE u_email = ? and google_id = ?";
+        $stmt = $dblink->prepare($sqlQuery);
+        $re = $stmt->execute(array("$email", "$google_id"));
+        $numrow = $stmt->rowCount();
+        $row = $stmt->fetch(PDO::FETCH_BOTH);
+        if ($numrow == 0) {
+            $c = new Connect();
+            $dblink3 = $c->connectToPDO();
+            $sql = "INSERT INTO `users`(`u_email`, `u_firstName`, `u_lastName`, `u_role`, `google_id`) VALUES (?,?,?,?,?)";
+            $re3 = $dblink3->prepare($sql);
+            $stmt3 = $re3->execute(array("$email", "$first_name", $last_name, 2, "$google_id"));
+        }else{
+            $_SESSION['email'] = $email;
+            $_SESSION['user_name'] = $name;
+            $_SESSION['user_id'] = $row['u_id'];
+            $_SESSION['user_role'] = $row['u_role'];
+            $_SESSION['isLoggedIn'] = true;
+            
+            if ( $_SESSION['user_role'] == 2) {
+                $_SESSION['user_role'] = 'user';  
+            }if( $_SESSION['user_role'] == 1){
+                $_SESSION['user_role'] = 'manger'; 
+            }if( $_SESSION['user_role'] == 0){
+                $_SESSION['user_role'] = 'admin'; 
+            }
             header("Location: index.php");
-            // if (!isset($_SESSION['isLoggedIn']) || $_SESSION['isLoggedIn'] !== true) {
-            //     // User is not logged in, redirect to login page or display an error message
-            //     header("Location: index.php");
-            // }
+            exit;
         }
     } else {
         header('Location: login_register.php');

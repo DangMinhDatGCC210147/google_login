@@ -7,10 +7,10 @@
 
         public function __construct()
         {
-            $this->server = "kfgk8u2ogtoylkq9.cbetxkdyhwsb.us-east-1.rds.amazonaws.com";
-            $this->user = "drixkykl7zjgtxw3";
-            $this->password = "f2xcfbcxhjz83h48";
-            $this->dbName = "fqryt14r9eny9lyx";
+            $this->server = "";
+            $this->user = "root";
+            $this->password = "";
+            $this->dbName = "wonderkid_world";
         }
 
         //Option 1: Use mySQLi
